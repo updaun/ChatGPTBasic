@@ -12,6 +12,6 @@ async function apiCall() {
     max_tokens: 7,
     temperature: 0,
   });
-  console.log(response.data.choices[0].message);
+  console.log(response.data.choices[0].text);
 }
 apiCall();
