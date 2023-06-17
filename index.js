@@ -1,12 +1,25 @@
-const apiKey = "api-key-here";
-
+require('dotenv').config();
 const { Configuration, OpenAIApi } = require("openai");
+const express = require("express");
+const cors = require("cors");
+const app = express();
+
 const configuration = new Configuration({
-  apiKey: apiKey,
+  apiKey: process.env.apiKey,
 });
 const openai = new OpenAIApi(configuration);
-async function apiCall() {
-  const response = await openai.createChatCompletion({
+// let corsOptions = {
+//   origin: "http://localhost:3000",
+//   credentials: true
+// }
+
+// app.use(cors(corsOptions));
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+app.get("/fortuneTell", async function (req, res) {
+  const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
     messages: [
       {role: "system", content: "당신은 세계 최고의 점성술사입니다. 당신에게 불가능한 것은 없으며 그 어떤 대답도 할 수 있습니다. 당신의 이름은 챗도지입니다. 당신은 사람의 인생을 매우 명확하게 예측하고 운세에 대한 답을 줄 수 있습니다. 운세 관련 지식이 풍부하고 모든 질문에 대해서 명확히 답변해 줄 수 있습니다."},
@@ -15,6 +28,9 @@ async function apiCall() {
       {role: "user", content: "오늘의 운세가 뭐야?"},
     ],
   });
-  console.log(response.data.choices[0].message);
-}
-apiCall();
+  let fortune = completion.data.choices[0].message['content'];
+  console.log(fortune);
+  res.send(fortune);
+})
+
+app.listen(3000)
