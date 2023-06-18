@@ -18,7 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.get("/fortuneTell", async function (req, res) {
+app.post("/fortuneTell", async function (req, res) {
   const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
     messages: [
@@ -30,7 +30,7 @@ app.get("/fortuneTell", async function (req, res) {
   });
   let fortune = completion.data.choices[0].message['content'];
   console.log(fortune);
-  res.send(fortune);
+  res.json({"assistant": fortune});
 })
 
 app.listen(3000)
