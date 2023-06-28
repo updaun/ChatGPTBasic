@@ -1,4 +1,5 @@
 require('dotenv').config();
+const serverless = require('serverless-http');
 const { Configuration, OpenAIApi } = require("openai");
 const express = require("express");
 const cors = require("cors");
@@ -8,13 +9,13 @@ const configuration = new Configuration({
   apiKey: process.env.apiKey,
 });
 const openai = new OpenAIApi(configuration);
-// let corsOptions = {
-//   origin: "http://localhost:3000",
-//   credentials: true
-// }
 
-// app.use(cors(corsOptions));
-app.use(cors());
+let corsOptions = {
+  origin: "https://chatdoge-jocoding-4jx.pages.dev",
+  credentials: true
+}
+app.use(cors(corsOptions));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -61,4 +62,6 @@ app.post("/fortuneTell", async function (req, res) {
   // }, 2000);
 })
 
-app.listen(3000)
+module.exports.handler = serverless(app);
+
+// app.listen(3000)
