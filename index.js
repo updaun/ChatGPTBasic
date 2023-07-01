@@ -2,7 +2,7 @@ require('dotenv').config();
 const serverless = require('serverless-http');
 const { Configuration, OpenAIApi } = require("openai");
 const express = require("express");
-const cors = require("cors");
+var cors = require("cors");
 const app = express();
 
 const configuration = new Configuration({
